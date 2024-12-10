@@ -1,0 +1,42 @@
+#scenario-1
+- name: print the mesg 
+  hosts: all 
+  tasks:
+  - debug: msg="this is arun"
+# scenario-2 
+- name: print the mesg
+  hosts: all
+  tasks:
+  - name: print the mesg
+    debug:
+     msg: "hi this arun"
+# scenario-3 adding multiple line under mesg parameter
+- name: print the mesg
+  hosts: all
+  tasks:
+  - name: print the mesg
+    debug:
+     msg: 
+      - "hi this arun"
+      - "this is arruneya"
+# scenario-4 adding the variable and mes
+- name: adding the variable
+  hosts: all
+  tasks:
+  - name: using the variable value
+    debug:
+     var: inventory_hostname   # if your using var , we can directly use variable name
+     #mes: this is my inventory name {{inventory_hostname}} # if you want print mesg along the variable value , we can use mesg inside curly braces need to give variable name
+# scenario-5 verbosity
+- name: adding the verbosity
+  hosts: all
+  tasks:
+  - name: using the variable value
+    debug:
+     msg: this is normale mesg
+  - name: Using the verbosity
+    debug:
+      msg: "print the verbosity"
+      verbosity: 2   
+# if we want to print verbosity we need the paramter -vv while running the playbook , otherwise it will skip the particular task where we mentioned vebosity as 2
+# Note: by default verbosity value is Zero in ansible

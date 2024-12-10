@@ -1,0 +1,66 @@
+- name: Using tags for multiple task 
+  hosts: all 
+  tasks:
+  - name: first task 
+    debug: 
+     msg: first task    
+    tags: first  
+  - name: second task 
+    debug: 
+     msg: second task  
+    tags: second 
+  - name: third task 
+    debug: 
+     msg: third task  
+    tags: third            
+  - name: fourth task 
+    debug: 
+     msg: fourth task
+    tags: fourth         
+  - name: fifth task 
+    debug: 
+     msg: fifth task       
+    tags: fifth 
+---
+# advanced
+- name: Using tags for multiple task 
+  hosts: all 
+  tasks:
+  - name: first task 
+    debug: 
+     msg: first task    
+    tags: 
+      - first  
+      - common
+      - never  
+  - name: second task 
+    debug: 
+     msg: second task  
+    tags: 
+      - second 
+      - never
+  - name: third task 
+    debug: 
+     msg: third task  
+    tags: 
+      - third
+      - common
+      - never         
+      - always     
+  - name: fourth task 
+    debug: 
+     msg: fourth task
+    tags: 
+      - fourth
+      - never         
+  - name: fifth task 
+    debug: 
+     msg: fifth task       
+    tags: 
+      - fifth
+      - never 
+      - always
+
+    # note: if you want to exeuct two task with single name we can do by using same tag name to different task
+    # note: never use for it will not execute any task inside the playbook , if you wnat we can mention tags : tag name
+    # if you want to e defualt task execute without using tags while running playbook, for this case we can always

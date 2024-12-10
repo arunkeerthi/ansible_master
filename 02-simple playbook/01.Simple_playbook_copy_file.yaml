@@ -1,0 +1,17 @@
+--- 
+ - hosts: all 
+   gather_facts: false #It will disable the by defult setup module while execute playbook
+   tasks:
+   - copy: src=web.xml dest=web.xml 
+   - file: path=demo.txt state=touch
+---
+# using name for plays and task
+- name: Play for copy and file
+  hosts: all
+  gather_facts: false
+  tasks:
+  - name: copy the file
+    copy: src=web.xml dest=web.xml
+  - name: Create the file 
+    file: path=kumar.txt state=touch  
+   

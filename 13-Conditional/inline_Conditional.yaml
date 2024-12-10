@@ -1,0 +1,23 @@
+- name: inline conditional
+  hosts: all 
+  vars:
+   x: 5
+   y: 10
+  tasks:
+  - name: inline conditional task
+    debug: 
+     msg:
+      "the value of x and y is {{ x if (x > y) else y}}" 
+---
+#we can set the variable
+- name: inline conditional
+  hosts: all 
+  vars:
+   x: 5
+   y: 10
+   larger: "{{ x if (x > y) else y}}"
+  tasks:
+  - name: inline conditional task
+    debug: 
+     msg:
+      "the value of x and y is {{ larger }}" 

@@ -1,0 +1,20 @@
+- name: filters using 
+  hosts: all
+  vars:
+   x: "the Value of X tHe smaLL"
+   p: [1,2,3,4,5,6]
+   y: "56"
+  gather_facts: false
+  tasks:
+  - name: for filtering the task
+    debug:
+     msg:
+      - "the value of x {{x|upper}}"
+      - "the value of x {{x|lower}}"
+      - "the value of x {{x|title}}"
+      - "the value of x is : {{x.upper()}}" #if you using python model we should use dot and ()
+      - "the value of y is: {{y|int}}"
+      - "the number of max p is {{p|max}}"
+      - "the number of min p is {{p|min}}"
+      - "{{x.split()}}" #split operton is working only python model
+      

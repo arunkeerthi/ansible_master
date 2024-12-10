@@ -1,0 +1,60 @@
+- name: installing tomcat and configur 
+  hosts: web 
+  gather_facts: false
+  become: yes 
+  vars:
+   required_java: java-1.8.0-amazon-corretto.x86_64
+   require_tomcat: 9.0.97
+   tomcat_url: https://downloads.apache.org/tomcat/tomcat-{{require_tomcat.split('.')[0]}}/v{{require_tomcat}}/bin/apache-tomcat-{{require_tomcat}}.tar.gz
+   port_number: 9090
+  tasks:
+  - name: update the server 
+    yum:
+     name: "*"
+     state: latest 
+  - name: Import Amazon Corretto GPG key
+    rpm_key:
+        state: present
+        key: https://yum.corretto.aws/corretto.key
+  - name: Add Amazon Corretto repository
+    get_url:
+      url: https://yum.corretto.aws/corretto.repo
+      dest: /etc/yum.repos.d/corretto.repo
+  - name: Update dnf repository cache
+    dnf:
+      name: '*'
+      state: latest
+  - name: Install Java 1.8 Amazon Corretto Development package
+    dnf:
+      name: java-1.8.0-amazon-corretto-devel
+      state: present
+  - name: setting default java {{required_java}} 
+    alternatives:
+     name: java
+     link: /usr/bin/java
+     path: /usr/lib/jvm/{{required_java}}/bin/java
+  - name: downloading required tomcat 
+    get_url:
+     url: "{{tomcat_url}}"
+     dest: /usr/local 
+  - name: unarcheving
+    unarchive:    
+     src: "apache-tomcat-{{require_tomcat}}.tar.gz"
+     dest: /usr/local  
+     remote_src: yes    
+    # basically unarchieve will work on control node. we need to remote for worker node 
+  - name: startup the tomcat_service
+    shell: "nohup /usr/local/apache-tomcat-{{require_tomcat}}/bin/startup.sh &"
+  - name: changing the port_number
+    template: 
+     src: ./server.xml.j2
+     dest: /usr/local/apache-tomcat-9.0.97/conf/server.xml
+  - name: shutdown the tomcat_service
+    shell: "nohup /usr/local/apache-tomcat-{{require_tomcat}}/bin/shutdown.sh &"
+  - name: startup the tomcat_service
+    shell: "nohup /usr/local/apache-tomcat-{{require_tomcat}}/bin/startup.sh &"     
+    
+
+      
+
+

@@ -1,0 +1,39 @@
+- name: collecting the information 
+  hosts: web
+  tasks:
+  - name: collecting the uptime 
+    shell: "uptime"
+    register: uptime
+  - name: collecting the information
+    debug:
+     msg: "{{inventory_hostname}},{{ansible_os_family}},{{ansible_system}},{{ansible_distribution}},{{uptime.stdout.split(',')[0].split('up')[-1]}}"
+     #Note: this will give the information , but we need to execute the details redirect into csv format , how to do that ?
+  - name: removing csv file 
+    file: 
+      dest: ./dis.csv
+      state: absent 
+    delegate_to: 172.31.36.207
+    run_once: yes 
+  - name: creating the csv file with header
+    copy: 
+      dest: ./dis.csv 
+      content: "server_name, os_family, os_name, os_distribution, uptime\n"
+    delegate_to: 172.31.36.207
+    run_once: yes   
+    # note: generally all the task will execute in slave server, but we need to execute in local server, so that we use deleagate 
+  - name: line in file updating information to each file
+    lineinfile:
+      path: ./dis.csv 
+      line: "{{inventory_hostname}},{{ansible_os_family}},{{ansible_system}},{{ansible_distribution}},{{uptime.stdout.split(',')[0].split('up')[-1]}}"
+    delegate_to: 172.31.36.207
+--- 
+- name: delegate vs local_action
+  hosts: all
+  tasks:
+  - name: collect the uptime 
+    shell: 'uptime' 
+    register: up_time
+    #delegate_to: 172.31.36.207
+  - debug: var=up_time.stdout  
+
+    

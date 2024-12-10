@@ -1,0 +1,29 @@
+- name: using loop varialbe 
+  hosts: all 
+  gather_facts: false
+  tasks:
+  - name: check the loop
+    debug:
+     msg:
+     - "the number of package need to install {{ item }}"
+    loop:
+    - git 
+    - maven 
+    - sonar 
+    - nexus
+---
+# similarly above the playbook we can yum moudlue instead of using debug moudle like belwo 
+- name: installing the orginal package 
+  hosts: all 
+  gather_facts: false 
+  become: yes 
+  tasks: 
+  - name: install the multiple package 
+    yum: 
+     name: {{ item }}
+     state: present 
+    loop:
+    - httpd 
+    - maven 
+    - wget 
+    - git 

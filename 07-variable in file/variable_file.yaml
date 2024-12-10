@@ -1,0 +1,17 @@
+# seconriao:1
+- hosts: all
+  gather_facts: false
+  vars_files: variable.yaml
+  tasks:
+  - debug: :var=package
+# seconriao:2
+- hosts: all
+  gather_facts: false
+  vars_files: variable.json
+  tasks:
+  - debug:
+     msg:
+      - "the value of x is {{p}}"
+      - "The number of packages {{r}}"
+
+      

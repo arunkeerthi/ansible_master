@@ -1,0 +1,24 @@
+--- 
+- name: the error handling
+  hosts: all 
+  gather_facts: false
+  tasks:
+  - name: check the ignore error 
+    yum: 
+     name: httpd 
+     state: present 
+    ignore_errors: yes 
+  - name: start the service 
+    service:
+     name: httpd 
+     state: started 
+---
+- name: wantedly failed the task 
+  hosts: all 
+  gather_facts: false 
+  tasks:
+  - command: "ls /home"
+    register: out
+    failed_when: out.rc==0 
+  - debug: var=out  
+    

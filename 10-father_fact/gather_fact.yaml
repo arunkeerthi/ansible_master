@@ -1,0 +1,25 @@
+- name: basic idea to get gather fact 
+  hosts: all 
+  gather_facts: false
+  tasks:
+  - name: find os distubation 
+    shell: "cat /etc/os-release | awk -F =  'NR==1 {print $2}' | awk '{print $1}' | tr '\"' ' '"
+    register: os_dist
+  - name: output of the os name and distrubtion name 
+    shell: "uname" 
+    register: os_name
+  - debug:
+     msg: 
+      - "the name of the os_distrubation {{os_dist.stdout}}"
+      - "the name of the os is {{os_name.stdout}}"
+  # Note if you want to collect the systme information we need to write the playbook like this , but by using gather fact we easily simplify.
+  # Using gather fact 
+  - name: collect the information
+    hosts: all
+    tasks:
+    - name: collect the information
+      debug:
+       msg:
+       - the name of the disbrution {{ansible_distribution}}"
+       - the name of the os {{ ansible_system }}
+       - the name of the family {{ ansible_os_family }}

@@ -1,0 +1,37 @@
+- name: checking the membership opertors
+  hosts: all
+  vars:
+   x: [2,10,11,2,5]
+   y: 10 
+  tasks:
+  - name: running the membership opertors
+    debug:
+      msg:
+       - y is in x {{ y in x }}
+       - 10 is in x {{ 10 in x }}
+       - 20 is in x {{ 20 not in x}}
+--- 
+# test operators:
+  - name: testing operators
+    hosts: db 
+    vars: 
+      x: 10
+      my_name: arunkumar
+      my_path: '/home/ansible/membership.yaml'
+    tasks:
+    - name: testing the operations 
+      debug:
+      msg:
+        - x is defined {{ x is defined }}
+        - y is defined  {{ y is defined }}
+        - y is undefined {{ y is undefined }}
+        - my name is lower {{ my_name is lower }}
+        - my name is upper {{ my_name is upper }}
+        - my name is string {{ my_name is string}}
+        - x number is divisable by 5 {{ x is divisibleby 5 }}
+        - x number is even {{ x is even }}
+        - x number is odd {{ x is odd }}
+        - x is number {{ x is number }}
+        - mypath is {{ my_path is file }}
+         - mypath is {{ my_path is directory }}
+           

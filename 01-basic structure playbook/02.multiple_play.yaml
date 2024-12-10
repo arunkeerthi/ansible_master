@@ -1,0 +1,8 @@
+- hosts: web 
+  become: yes 
+  tasks:
+   - yum: name=httpd state=present
+- hosts: db 
+  become: yes
+  tasks:
+   - yum: name=nginx state=present

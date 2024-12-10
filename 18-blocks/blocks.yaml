@@ -1,0 +1,85 @@
+- name: install multiple package 
+  hosts: web
+  tasks:
+  - name: installing the httpd in httpd 
+    yum: 
+     name: httpd 
+     state: present 
+    become: yes 
+    when: ansible_os_family=="RedHat"
+  - name: start the service
+    service:
+     name: httpd
+     state: started
+    become: yes  
+    when: ansible_os_family=="RedHat"
+  - name: install the package apache2 in ubuntu 
+    apt:
+     name: apache2
+     state: present
+    become: yes  
+    when: ansible_os_family=="Ubuntu"
+  - name: start the service 
+    service:
+     name: apache2
+     state: started
+    become: yes  
+    when: ansible_os_family=="Ubuntu"             
+  - debug:
+     msg: "Successfully Packages installation completed"  
+#Note: above playbook we are the same os family and become details add multiple times in the playbook , to avoiding the number to times adding 
+#same name in multiple task, we can use block
+---
+#We can simplfy by using block
+- name: using blocks 
+  hosts: all 
+  tasks:
+  - block:
+    - name: install httpd for "RedHat"
+      yum:
+       name: httpd 
+       state: present 
+    - name: start the service 
+      service: 
+        name: httpd
+        state: started 
+    when: ansible_os_family=="RedHat"
+    become: yes 
+  - block: 
+    - name: install httpd for ubuntu
+      apt:
+        name: apache2 
+        state: present 
+    - name: start the service 
+      service: 
+        name: apache2 
+        state: started 
+    when: ansible_os_family=="Ubuntu"
+    become: yes 
+  - debug: 
+     msg: 
+      "Successfully installed" 
+--- 
+# error handling resuce 
+- name: error handling 
+  hosts: web
+  gather_facts: false 
+  tasks:
+  - block: 
+    - name: check the path of /home/ansible 
+      command: "ls /home/ansible"
+      register: home_out
+    rescue:
+    - name: print the mesg 
+      debug:
+       msg: 
+        "if the /home/ansible path is wrong , this resuce will execute"   
+   #Note if first task not execute then only resuce task will execute
+    always:
+    - name: always print the msg 
+      debug:
+       msg:
+        "it prints always either wrong or right"
+    # Note: it will always execute,either first task execute or not
+
+      

@@ -1,0 +1,41 @@
+#cenario-1
+#scalar value
+- hosts: all
+  name: scalar data structure
+  vars:
+   x: arun
+  tasks:
+  - name: scalar
+    debug:
+     msg: this is value of {{x}}
+
+#Scenario-2
+#sequental or list data structure
+- hosts: all
+  name: scalar data structure
+  vars:
+   x: arun
+   #package: ["git",httpd,maven,wget]  
+   package:
+   - 'vim'
+   - 'nano'
+   - 'httpd'
+  tasks:
+  - name: scalar
+    debug:
+     var: package
+# we can mentioned the value two ways
+# Note: if you want to print particular packages we can use index value like var:package[0]
+#scenario-3
+- name: installing package differnet os
+  hosts: all
+  vars:
+   web_servers: 
+    Linux: httpd 
+    ubuntu: apache2
+  tasks:
+  - name: installing the packages
+    debug: 
+     var: web_servers
+#Note: 1.if you want to print only key we can use .key() example var:web_servers.key()
+      #2. if you want to print any one of the os we can by value example var: webserver['Linux'] or var:webserver.get('Linux')

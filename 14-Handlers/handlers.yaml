@@ -1,0 +1,36 @@
+- name: installing httpd
+  hosts: all
+  gather_facts: false
+  become: yes
+  tasks:
+  - name: install the httpd
+    yum:
+     name: httpd
+     state: present
+    register: out #note it will store the out of the status into variable.
+  - name: start the service 
+    service:
+     name: httpd 
+     state: started 
+    when: out.changed == true  
+# if first task changes happend , the second task will exeute otherwise it will not exeucte, the samething we can achieve by using handlers
+--- 
+- name: installing httpd
+  hosts: all
+  gather_facts: false
+  become: yes
+  tasks:
+  - name: install the httpd
+    yum:
+     name: httpd
+     state: present
+    notify:
+     - httpd started  
+  handlers:
+  - name: httpd started 
+    service: 
+     name: httpd 
+     state: started
+---
+
+

@@ -1,0 +1,31 @@
+- name: custom variable
+  hosts: all
+  vars:
+    x: 23
+    y: 45.25
+    writer_of_script: Arunkumar / "arun kumar"
+    boolen: false  # Should not use double quotes for this boolen , otherwise it will consider string
+  tasks:
+    - name: mesg printing variable
+      debug:
+        msg:
+          - "the value of x is: {{ x }}"
+          - "the value of y is: {{ y }}"
+          - "the value of script is: {{ writer_of_script }}"
+          - "the value of boolen is: {{ boolen }}"
+#if you want to know data type of every variable we can use {{variable|type_debug}}
+- name: custom variable
+  hosts: all
+  vars:
+    x: 23
+    y: 45.25
+    writer_of_script: Arunkumar / "arun kumar"
+    boolen: false  # Should not use double quotes for this boolen , otherwise it will consider string
+  tasks:
+    - name: mesg printing variable
+      debug:
+        msg:
+          - "the value of x is: {{ x }} and type is {{x|type_debug}}"
+          - "the value of y is: {{ y }} and type is {{y|type_debug}}"
+          - "the value of script is: {{ writer_of_script }} and type is {{writer_of_script|type_debug}}"
+          - "the value of boolen is: {{ boolen }} and type is {{boolen|type_debug}}"
